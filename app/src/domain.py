@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import field, dataclass
 import datetime
+from typing import Any
 import uuid
 
 @dataclass
@@ -34,4 +35,40 @@ class UserGenerationService(ABC):
     @classmethod
     def generate_user(cls) -> UserModel:
         '''Abstract method to generate a user model from some external service'''
+        raise NotImplementedError
+
+class RepositoryBase[T](ABC):
+    # pylint: disable=undefined-variable
+
+    @abstractmethod
+    def get(self, entityId: Any) -> T:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find(self) -> list[T]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def insert(self, entity: T) -> bool:
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete(self, entityId: Any) -> bool:
+        raise NotImplementedError
+
+class UserRepository(RepositoryBase[UserModel]):
+    @abstractmethod
+    def get(self, entityId: str) -> UserModel:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find(self) -> list[UserModel]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def insert(self, entity: [UserModel]) -> bool:
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete(self, entityId: str) -> bool:
         raise NotImplementedError
