@@ -12,7 +12,7 @@ ENV PYTHONUNBUFFERED=1
 COPY ./app/requirements.txt .
 RUN python -m pip install -r requirements.txt
 
-WORKDIR /app/src
+WORKDIR /app
 COPY ./app/src/ /app/src
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
@@ -22,5 +22,5 @@ USER appuser
 
 RUN dir
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "-k", "uvicorn.workers.UvicornWorker", "web.endpoints:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "-k", "uvicorn.workers.UvicornWorker", "src.web.endpoints:app"]
 

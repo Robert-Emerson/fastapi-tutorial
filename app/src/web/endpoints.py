@@ -1,9 +1,9 @@
 '''User API endpoints'''
 from typing import Annotated
 from fastapi import FastAPI, Depends
-from domain import UserGenerationService
-from infrastructure.services import UserGenerationWebService
-from web.models import User
+from src.domain import UserGenerationService
+from src.infrastructure.services import UserGenerationWebService
+from src.web.models import User
 
 app = FastAPI()
 

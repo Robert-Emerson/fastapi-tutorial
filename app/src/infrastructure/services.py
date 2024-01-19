@@ -4,7 +4,7 @@ from typing import Any
 import datetime
 import requests
 from pydantic import BaseModel
-import domain
+from src.domain import UserModel, UserGenerationService, LocationEntity
 
 class _UserServiceModel(BaseModel):
     name: dict[str, str]
@@ -14,9 +14,9 @@ class _UserServiceModel(BaseModel):
     email: str
 
 
-class UserGenerationWebService(domain.UserGenerationService):
+class UserGenerationWebService(UserGenerationService):
     @classmethod
-    def generate_user(cls) -> domain.UserModel:
+    def generate_user(cls) -> UserModel:
 
         # TODO: implement retry logic (maybe decorator for this?)
         response = requests.get("https://randomuser.me/api/")
@@ -26,14 +26,14 @@ class UserGenerationWebService(domain.UserGenerationService):
     @staticmethod
     def __map_service_user_to_domain(
         service_user: _UserServiceModel,
-    ) -> domain.UserModel:
-        return domain.UserModel(
+    ) -> UserModel:
+        return UserModel(
             first_name=service_user.name["first"],
             last_name=service_user.name["last"],
             birthday=datetime.datetime.fromisoformat(service_user.dob["date"]).date(),
             phone=service_user.phone,
             email=service_user.email,
-            location=domain.LocationEntity(
+            location=LocationEntity(
                 address_line_one=str(service_user.location["street"]["number"])
                 + " "
                 + service_user.location["street"]["name"],
