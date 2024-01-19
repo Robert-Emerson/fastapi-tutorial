@@ -4,3 +4,6 @@ uvicorn[standard]
 gunicorn
 pydantic
 requests
+alembic
+sqlalchemy
+psycopg2-binary
