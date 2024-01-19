@@ -1,12 +1,12 @@
+'''Concrete implementations of domain services'''
+
 from typing import Any
 import datetime
 import requests
 from pydantic import BaseModel
-from domain.services import user_generation_service
-from domain.models import user
+import domain
 
-
-class UserServiceModel(BaseModel):
+class _UserServiceModel(BaseModel):
     name: dict[str, str]
     location: dict[str, Any | dict[str, Any]]
     dob: dict[str, Any]
@@ -14,24 +14,26 @@ class UserServiceModel(BaseModel):
     email: str
 
 
-class UserGenerationWebService(user_generation_service.UserGenerationService):
-    def generate_user(self) -> user.UserModel:
+class UserGenerationWebService(domain.UserGenerationService):
+    @classmethod
+    def generate_user(cls) -> domain.UserModel:
+
         # TODO: implement retry logic (maybe decorator for this?)
         response = requests.get("https://randomuser.me/api/")
-        service_user = UserServiceModel(**response.json()["results"][0])
-        return self.__map_service_user_to_domain(service_user)
+        service_user = _UserServiceModel(**response.json()["results"][0])
+        return cls.__map_service_user_to_domain(service_user)
 
     @staticmethod
     def __map_service_user_to_domain(
-        service_user: UserServiceModel,
-    ) -> user.UserModel:
-        return user.UserModel(
+        service_user: _UserServiceModel,
+    ) -> domain.UserModel:
+        return domain.UserModel(
             first_name=service_user.name["first"],
             last_name=service_user.name["last"],
             birthday=datetime.datetime.fromisoformat(service_user.dob["date"]).date(),
             phone=service_user.phone,
             email=service_user.email,
-            location=user.LocationEntity(
+            location=domain.LocationEntity(
                 address_line_one=str(service_user.location["street"]["number"])
                 + " "
                 + service_user.location["street"]["name"],

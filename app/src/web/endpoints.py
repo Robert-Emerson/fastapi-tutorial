@@ -1,14 +1,15 @@
+'''User API endpoints'''
 from typing import Annotated
 from fastapi import FastAPI, Depends
-from domain.services.user_generation_service import UserGenerationService
-from infrastructure.services.user_generation_web_service import UserGenerationWebService
-from web.user import User
+from domain import UserGenerationService
+from infrastructure.services import UserGenerationWebService
+from web.models import User
 
 app = FastAPI()
 
-
-@app.get("/")
-async def root():
+@app.get("/health")
+async def health():
+    '''Health endpoint'''
     return {"message": "Hello World!"}
 
 
@@ -16,6 +17,7 @@ async def root():
 async def create_user(
     user_service: Annotated[UserGenerationService, Depends(UserGenerationWebService)]
 ) -> User:
+    '''Endpoint to generate a user'''
     user = user_service.generate_user()
     return User(
         **{

@@ -1,5 +1,5 @@
+'''DTOs for API endpoints'''
 from dataclasses import dataclass
-
 
 @dataclass
 class User:
