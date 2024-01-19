@@ -1,2 +1,11 @@
+# VS Code metadata
 .vscode
+
+# Docker environment configuration
 .env
+
+# Python venv files
+pyvenv.cfg
+app/Lib
+app/Scripts
+app/Include

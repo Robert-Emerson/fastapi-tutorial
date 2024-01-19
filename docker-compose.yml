@@ -5,18 +5,26 @@ services:
     image: fastapitutorial
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./app/Dockerfile
     ports:
       - 8000:8000
     depends_on:
-       - db
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
 
   db:
-   image: postgres
-   restart: always
-   environment:
-     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-     - POSTGRES_USER=${POSTGRES_USER}
-   ports:
-     - 5432:5432
-   # TODO: configure postgres healthcheck
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USERNAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

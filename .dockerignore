@@ -1,0 +1,8 @@
+# Exclude venv from depoyable image
+app/Include
+app/Lib
+app/Scripts
+app/pyvenv.cfg
+
+# Exclude unit tests from depoyable image
+app/test
