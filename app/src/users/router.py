@@ -7,8 +7,8 @@ from src.users.schemas import UserGenerationService
 from src.users.services import UserGenerationWebService
 
 router = APIRouter(
-    prefix="/user",
-    tags=["items"],
+    prefix="/users",
+    tags=["users"],
     responses={404: {"description": "Not found"}},
 )
 
@@ -28,8 +28,8 @@ def create_user(
     )
 
 
-@router.get("/user/{id}")
-def get_user() -> User:
+@router.get("/{user_id}")
+def get_user(user_id) -> User:
     '''Endpoint to return a user'''
     return User(
         **{
