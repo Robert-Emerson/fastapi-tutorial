@@ -4,7 +4,7 @@ from typing import Any
 import datetime
 import requests
 from pydantic import BaseModel
-from src.domain import UserModel, UserGenerationService, LocationEntity
+from src.users.schemas import UserModel, UserGenerationService, LocationEntity
 
 class _UserServiceModel(BaseModel):
     name: dict[str, str]

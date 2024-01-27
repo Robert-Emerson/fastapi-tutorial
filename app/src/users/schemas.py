@@ -6,6 +6,8 @@ import datetime
 from typing import Any
 import uuid
 
+from src.infrastructure.repositories import RepositoryBase
+
 @dataclass
 class LocationEntity:
     '''Data class for location information'''
@@ -37,24 +39,6 @@ class UserGenerationService(ABC):
         '''Abstract method to generate a user model from some external service'''
         raise NotImplementedError
 
-class RepositoryBase[T](ABC):
-    # pylint: disable=undefined-variable
-
-    @abstractmethod
-    def get(self, entityId: Any) -> T:
-        raise NotImplementedError
-
-    @abstractmethod
-    def find(self) -> list[T]:
-        raise NotImplementedError
-
-    @abstractmethod
-    def insert(self, entity: T) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
-    def delete(self, entityId: Any) -> bool:
-        raise NotImplementedError
 
 class UserRepository(RepositoryBase[UserModel]):
     @abstractmethod
